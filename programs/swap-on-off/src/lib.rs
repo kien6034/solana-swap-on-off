@@ -14,7 +14,7 @@ use instructions::*;
 pub mod swap_on_off {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        instructions::init_market::initialize(ctx)
+    pub fn initialize(ctx: Context<Initialize>, id: String) -> Result<()> {
+        instructions::init_market::initialize(ctx, id)
     }
 }

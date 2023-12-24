@@ -2,12 +2,12 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{ Mint, TokenAccount };
 use crate::{ state::Market, MARKET_PDA_SEED, MARKET_VAULT_PDA_SEED };
 
-pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+pub fn initialize(ctx: Context<Initialize>, id: String) -> Result<()> {
     let market = &mut ctx.accounts.market;
 
     market.initializer = *ctx.accounts.initializer.key;
     market.token_mint = *ctx.accounts.token_mint.to_account_info().key;
-    market.token_vault = *ctx.accounts.escrow.to_account_info().key;
+    market.token_vault = *ctx.accounts.token_vault.to_account_info().key;
     market.signer = *ctx.accounts.initializer.key;
 
     Ok(())
@@ -40,7 +40,7 @@ pub struct Initialize<'info> {
         token::mint = token_mint,
         token::authority = market
     )]
-    pub escrow: Account<'info, TokenAccount>,
+    pub token_vault: Account<'info, TokenAccount>,
 
     pub system_program: Program<'info, System>,
     pub rent: Sysvar<'info, Rent>,

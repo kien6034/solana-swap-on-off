@@ -26,7 +26,7 @@ export type SwapOnOff = {
           "isSigner": false
         },
         {
-          "name": "escrow",
+          "name": "tokenVault",
           "isMut": true,
           "isSigner": false
         },
@@ -46,7 +46,12 @@ export type SwapOnOff = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -109,7 +114,7 @@ export const IDL: SwapOnOff = {
           "isSigner": false
         },
         {
-          "name": "escrow",
+          "name": "tokenVault",
           "isMut": true,
           "isSigner": false
         },
@@ -129,7 +134,12 @@ export const IDL: SwapOnOff = {
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
     }
   ],
   "accounts": [

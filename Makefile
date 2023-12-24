@@ -8,7 +8,7 @@ export PATH:=$(HOME)/.local/share/solana/install/active_release/bin:$(PATH)
 
 CLUSTER ?= testnet
 
-export WALLET_PATH:=.wallets
+export WALLET_PATH:=scripts/.wallets
 export PROGRAM_NAME?=swap-on-off
 
 export CLUSTER_URL := $(if $(filter testnet,$(CLUSTER)),$(RENEC_TESTNET_URL),\
@@ -16,7 +16,7 @@ export CLUSTER_URL := $(if $(filter testnet,$(CLUSTER)),$(RENEC_TESTNET_URL),\
                  $(if $(filter localnet,$(CLUSTER)),$(RENEC_LOCALNET_URL),\
                  $(error Unknown cluster name: $(CLUSTER)))))
 
-export CLI_VERSION := $(if $(filter testnet,$(CLUSTER)),1.16.5,$(if $(filter mainnet,$(CLUSTER)),1.16.5,$(if $(filter localnet,$(CLUSTER)),1.13.6,$(error Unknown cluster name: $(CLUSTER)))))
+export CLI_VERSION := $(if $(filter testnet,$(CLUSTER)),1.16.5,$(if $(filter mainnet,$(CLUSTER)),1.16.5,$(if $(filter localnet,$(CLUSTER)),1.16.5,$(error Unknown cluster name: $(CLUSTER)))))
 
 show-network-config:
 	@echo "interacting with cluster: $(CLUSTER_URL), CLI_VERSION: $(CLI_VERSION)"
@@ -25,7 +25,7 @@ install-deps: show-network-config
 	@. ./dev-scripts/install-program-deps.sh
 
 localnet:
-	@$(MAKE) install-deps CLI_VERSION=1.9.29
+	@$(MAKE) install-deps CLI_VERSION=1.16.5
 	solana-test-validator --reset
 
 gen-wallet: install-deps
@@ -50,3 +50,8 @@ port-dapp:
 	@$(MAKE) install-deps CLI_VERSION=$(CLI_VERSION)
 	@./dev-scripts/port-program.sh "$(program_file_path)" "$(keypair_path)" "$(program_id_keypair)"
 	
+
+deploy-test: set-cluster-url
+	@$(MAKE) install-deps CLI_VERSION=$(CLI_VERSION)  
+	@$(MAKE) CLUSTER=localnet faucet name=$(name) amount=50 
+	@./dev-scripts/deploy.sh "$(name)"

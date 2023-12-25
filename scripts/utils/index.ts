@@ -17,8 +17,6 @@ export const getFixture = async function (
   const connection = new Connection(env.RPC_END_POINT);
 
   const wallet = new Wallet(feePayerAuthority);
-  const provider = new AnchorProvider(connection, wallet, { commitment });
-
   const ctx = ProgramContext.from(
     connection,
     wallet,

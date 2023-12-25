@@ -5,6 +5,9 @@ import {Client}  from "../sdk/src";
 import { BN } from "@project-serum/anchor";
 
 
+/**
+ * @usage swap off-on
+ */
 const main = async () => {
   const wallets = getWallets([
     ROLES.DEPLOYER,
@@ -17,8 +20,10 @@ const main = async () => {
   const client = new Client(ctx, tokenMint);
 
   // lock amount 
-  const lockAmount = new BN(1000);
-  const tx = await client.unlockToken(lockAmount);
+  const unlockAmount = new BN(1000);
+
+  //let sig = client.getSignature();
+  const tx = await client.unlockToken(unlockAmount);//signature);
  const hash =  await tx.buildAndExecute();
  console.log("hash: ", hash);
  

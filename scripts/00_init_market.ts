@@ -14,7 +14,9 @@ const main = async () => {
 
   
   const client = new Client(ctx, tokenMint);
-  const tx = await client.initMarket(deployer.publicKey);
+
+  const signer = deployer.publicKey; // key for signer 
+  const tx = await client.initMarket(signer);
   const hash = await tx.buildAndExecute();
   console.log("hash: ",   hash);
 };

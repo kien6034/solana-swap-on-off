@@ -1,7 +1,7 @@
 {
   "name": "@kien6034/swap-on-off",
   "version": "0.0.1",
-  "description": "Typescript SDK to interact with Escrow program.",
+  "description": "Typescript SDK.",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -50,8 +50,6 @@
   "lint-staged": {
     "*.{ts,md}": "yarn run prettier-format"
   },
-  "files": [
-    "/dist"
-  ],
-  "author": "tunghoang@remitano.com"
+  "files": ["/dist"],
+  "author": "trinhtrungkientb99@gmail.com"
 }

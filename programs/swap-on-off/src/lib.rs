@@ -8,6 +8,7 @@ pub const MARKET_VAULT_PDA_SEED: &[u8] = b"market_vault";
 pub mod instructions;
 pub mod state;
 pub mod util;
+pub mod errors;
 
 use instructions::*;
 
@@ -23,7 +24,12 @@ pub mod swap_on_off {
         instructions::lock_token::lock_token(ctx, amount)
     }
 
-    pub fn unlock_token(ctx: Context<UnlockToken>, amount: u64) -> Result<(), ProgramError> {
-        instructions::unlock_token::unlock_token(ctx, amount)
+    pub fn unlock_token(
+        ctx: Context<UnlockToken>,
+        tx_id: String,
+        amount: u64,
+        sig: [u8; 64]
+    ) -> Result<(), ProgramError> {
+        instructions::unlock_token::unlock_token(ctx, tx_id, amount, sig)
     }
 }

@@ -24,8 +24,8 @@ const main = async () => {
 
   //let sig = client.getSignature();
   const tx = await client.unlockToken(unlockAmount);//signature);
- const hash =  await tx.buildAndExecute();
- console.log("hash: ", hash);
+  const hash =  await tx.buildAndExecute();
+  console.log("hash: ", hash);
  
 };
 

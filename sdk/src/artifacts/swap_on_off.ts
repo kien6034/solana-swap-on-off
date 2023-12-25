@@ -152,12 +152,36 @@ export type SwapOnOff = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "ixSysvar",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "The address check is needed because otherwise",
+            "the supplied Sysvar could be anything else.",
+            "The Instruction Sysvar has not been implemented",
+            "in the Anchor framework yet, so this is the safe approach."
+          ]
         }
       ],
       "args": [
         {
+          "name": "txId",
+          "type": "string"
+        },
+        {
           "name": "amount",
           "type": "u64"
+        },
+        {
+          "name": "sig",
+          "type": {
+            "array": [
+              "u8",
+              64
+            ]
+          }
         }
       ],
       "returns": {
@@ -195,6 +219,22 @@ export type SwapOnOff = {
                 1
               ]
             }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "ErrorCode",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NumberCastError"
+          },
+          {
+            "name": "SigFailed"
           }
         ]
       }
@@ -356,12 +396,36 @@ export const IDL: SwapOnOff = {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
+        },
+        {
+          "name": "ixSysvar",
+          "isMut": false,
+          "isSigner": false,
+          "docs": [
+            "The address check is needed because otherwise",
+            "the supplied Sysvar could be anything else.",
+            "The Instruction Sysvar has not been implemented",
+            "in the Anchor framework yet, so this is the safe approach."
+          ]
         }
       ],
       "args": [
         {
+          "name": "txId",
+          "type": "string"
+        },
+        {
           "name": "amount",
           "type": "u64"
+        },
+        {
+          "name": "sig",
+          "type": {
+            "array": [
+              "u8",
+              64
+            ]
+          }
         }
       ],
       "returns": {
@@ -399,6 +463,22 @@ export const IDL: SwapOnOff = {
                 1
               ]
             }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "ErrorCode",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NumberCastError"
+          },
+          {
+            "name": "SigFailed"
           }
         ]
       }

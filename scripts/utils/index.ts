@@ -7,7 +7,7 @@ export * from "./wallet";
 
 export type ProgramFixture = { 
   ctx: ProgramContext,
-  tokenMint: PublicKey
+  tokenMint: PublicKey,
 };
 
 export const getFixture = async function (
@@ -22,7 +22,7 @@ export const getFixture = async function (
   const ctx = ProgramContext.from(
     connection,
     wallet,
-    new PublicKey(env.ESCROW_PROGRAM_ID),
+    new PublicKey(env.PROGRAM_ID),
     { commitment }
   );
 

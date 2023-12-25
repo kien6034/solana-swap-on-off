@@ -6,24 +6,25 @@ import { PDAInfo } from "../pda";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 
-export type InitializeConfigParams = {
-  initializer: PublicKey;
-  signer: PublicKey;
+export type UnlockTokenParams = {
+  user: PublicKey;
+  userTokenAccount: PublicKey;
   tokenMint: PublicKey;
   market: PDAInfo;
-  tokenVault: PDAInfo
+  tokenVault: PDAInfo;
+  amount: BN
 };
 
-export async function initializeConfig(
+export async function unlockToken(
   program: Program<SwapOnOff>,
-  params: InitializeConfigParams
+  params: UnlockTokenParams
 ): Promise<Instruction> {
-  const { initializer, signer, tokenMint, market, tokenVault } = params;
+  const {user, userTokenAccount, tokenMint, market, tokenVault, amount } = params;
   const ix = await program.methods
-    .initialize(market.bump)
+    .unlockToken(amount)
     .accounts({
-      initializer,
-      signer,
+      user,
+      userTokenAccount,
       tokenMint,
       market: market.key,
       tokenVault: tokenVault.key,

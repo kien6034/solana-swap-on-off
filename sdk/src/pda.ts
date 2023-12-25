@@ -11,18 +11,19 @@ export interface PDAInfo {
 
 export class PDA {
   readonly programId: anchor.web3.PublicKey;
-  readonly marketId: string;
   readonly tokenMint: PublicKey;
 
-  public constructor(programId: anchor.web3.PublicKey, marketId: string, tokenMint: PublicKey) {
+  public constructor(programId: anchor.web3.PublicKey, tokenMint: PublicKey) {
     this.programId = programId;
-    this.marketId = marketId;
     this.tokenMint = tokenMint;
   }
 
   public getMarketPDA = (): PDAInfo => {
     const [pda, bump] = anchor.web3.PublicKey.findProgramAddressSync(
-      [anchor.utils.bytes.utf8.encode(MARKET_SEED), this.tokenMint.toBuffer(),  anchor.utils.bytes.utf8.encode(this.marketId)],
+      [
+        anchor.utils.bytes.utf8.encode(MARKET_SEED), 
+        this.tokenMint.toBuffer(),  
+      ],
       this.programId
     );
 
@@ -37,7 +38,6 @@ export class PDA {
       [
         anchor.utils.bytes.utf8.encode(MARKET_VAULT_SEED),
         this.tokenMint.toBuffer(),
-        anchor.utils.bytes.utf8.encode(this.marketId),
       ],
       this.programId
     );

@@ -12,7 +12,7 @@ export type SwapOnOff = {
         },
         {
           "name": "signer",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -48,10 +48,121 @@ export type SwapOnOff = {
       ],
       "args": [
         {
-          "name": "id",
-          "type": "string"
+          "name": "marketBump",
+          "type": "u8"
         }
-      ]
+      ],
+      "returns": {
+        "defined": "ProgramError"
+      }
+    },
+    {
+      "name": "lockToken",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "returns": {
+        "defined": "ProgramError"
+      }
+    },
+    {
+      "name": "unlockToken",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "returns": {
+        "defined": "ProgramError"
+      }
     }
   ],
   "accounts": [
@@ -60,10 +171,6 @@ export type SwapOnOff = {
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "id",
-            "type": "string"
-          },
           {
             "name": "initializer",
             "type": "publicKey"
@@ -79,6 +186,15 @@ export type SwapOnOff = {
           {
             "name": "signer",
             "type": "publicKey"
+          },
+          {
+            "name": "marketBump",
+            "type": {
+              "array": [
+                "u8",
+                1
+              ]
+            }
           }
         ]
       }
@@ -100,7 +216,7 @@ export const IDL: SwapOnOff = {
         },
         {
           "name": "signer",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -136,10 +252,121 @@ export const IDL: SwapOnOff = {
       ],
       "args": [
         {
-          "name": "id",
-          "type": "string"
+          "name": "marketBump",
+          "type": "u8"
         }
-      ]
+      ],
+      "returns": {
+        "defined": "ProgramError"
+      }
+    },
+    {
+      "name": "lockToken",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "returns": {
+        "defined": "ProgramError"
+      }
+    },
+    {
+      "name": "unlockToken",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "returns": {
+        "defined": "ProgramError"
+      }
     }
   ],
   "accounts": [
@@ -148,10 +375,6 @@ export const IDL: SwapOnOff = {
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "id",
-            "type": "string"
-          },
           {
             "name": "initializer",
             "type": "publicKey"
@@ -167,6 +390,15 @@ export const IDL: SwapOnOff = {
           {
             "name": "signer",
             "type": "publicKey"
+          },
+          {
+            "name": "marketBump",
+            "type": {
+              "array": [
+                "u8",
+                1
+              ]
+            }
           }
         ]
       }

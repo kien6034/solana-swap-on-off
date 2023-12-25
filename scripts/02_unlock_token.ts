@@ -2,6 +2,7 @@
 import { getFixture } from "./utils";
 import { getWallets, ROLES } from "./utils/";
 import {Client}  from "../sdk/src";
+import { BN } from "@project-serum/anchor";
 
 
 const main = async () => {
@@ -14,9 +15,13 @@ const main = async () => {
 
   
   const client = new Client(ctx, tokenMint);
-  const tx = await client.initMarket(deployer.publicKey);
-  const hash = await tx.buildAndExecute();
-  console.log("hash: ",   hash);
+
+  // lock amount 
+  const lockAmount = new BN(1000);
+  const tx = await client.unlockToken(lockAmount);
+ const hash =  await tx.buildAndExecute();
+ console.log("hash: ", hash);
+ 
 };
 
 

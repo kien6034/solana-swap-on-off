@@ -52,9 +52,6 @@ export type SwapOnOff = {
                     "type": "u8";
                 }
             ];
-            "returns": {
-                "defined": "ProgramError";
-            };
         },
         {
             "name": "lockToken";
@@ -106,9 +103,6 @@ export type SwapOnOff = {
                     "type": "u64";
                 }
             ];
-            "returns": {
-                "defined": "ProgramError";
-            };
         },
         {
             "name": "unlockToken";
@@ -157,12 +151,6 @@ export type SwapOnOff = {
                     "name": "ixSysvar";
                     "isMut": false;
                     "isSigner": false;
-                    "docs": [
-                        "The address check is needed because otherwise",
-                        "the supplied Sysvar could be anything else.",
-                        "The Instruction Sysvar has not been implemented",
-                        "in the Anchor framework yet, so this is the safe approach."
-                    ];
                 }
             ];
             "args": [
@@ -184,9 +172,6 @@ export type SwapOnOff = {
                     };
                 }
             ];
-            "returns": {
-                "defined": "ProgramError";
-            };
         }
     ];
     "accounts": [
@@ -224,20 +209,16 @@ export type SwapOnOff = {
             };
         }
     ];
-    "types": [
+    "errors": [
         {
-            "name": "ErrorCode";
-            "type": {
-                "kind": "enum";
-                "variants": [
-                    {
-                        "name": "NumberCastError";
-                    },
-                    {
-                        "name": "SigFailed";
-                    }
-                ];
-            };
+            "code": 6000;
+            "name": "NumberCastError";
+            "msg": "Number Cast Error";
+        },
+        {
+            "code": 6001;
+            "name": "SigFailed";
+            "msg": "Sig Failed";
         }
     ];
 };

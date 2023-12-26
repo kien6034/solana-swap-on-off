@@ -33,9 +33,9 @@ pub fn unlock_token(
     verify_ed25519_ix(&ix, &pk, &msg, &sig)?;
 
     transfer_from_vault_to_user(
-        user.to_account_info(),
-        &user_token_account.to_account_info(),
+        market.to_account_info(),
         &token_vault.to_account_info(),
+        &user_token_account.to_account_info(),
         &token_program.to_account_info(),
         amount,
         &[&market.market_seeds()]

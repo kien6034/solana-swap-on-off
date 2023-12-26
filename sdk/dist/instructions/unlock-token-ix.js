@@ -14,9 +14,9 @@ const web3_js_1 = require("@solana/web3.js");
 const spl_token_1 = require("@solana/spl-token");
 function unlockToken(program, params) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { user, userTokenAccount, tokenMint, market, tokenVault, amount } = params;
+        const { txId, user, userTokenAccount, tokenMint, market, tokenVault, amount, sig, } = params;
         const ix = yield program.methods
-            .unlockToken(amount)
+            .unlockToken(txId, amount, Array.from(sig))
             .accounts({
             user,
             userTokenAccount,
@@ -26,6 +26,7 @@ function unlockToken(program, params) {
             rent: web3_js_1.SYSVAR_RENT_PUBKEY,
             systemProgram: web3_js_1.SystemProgram.programId,
             tokenProgram: spl_token_1.TOKEN_PROGRAM_ID,
+            ixSysvar: web3_js_1.SYSVAR_INSTRUCTIONS_PUBKEY,
         })
             .instruction();
         return {

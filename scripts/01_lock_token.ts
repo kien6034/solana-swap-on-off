@@ -1,6 +1,6 @@
 import { getFixture } from "./utils";
 import { getWallets, ROLES } from "./utils/";
-import { Client } from "../sdk/src";
+import { Client } from "@kien6034/swap-on-off";
 import { BN } from "@project-serum/anchor";
 
 /**

@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("3kRBwdLwVE8uE4S3V64tPFwLqLDrodjNbiLLgUgpEZZz");
+declare_id!("AwSAKJKjFCVyQ9YXinJu5gcw2auxqaCcRLdjaNLQnMoe");
 
 pub const MARKET_PDA_SEED: &[u8] = b"market";
 pub const MARKET_VAULT_PDA_SEED: &[u8] = b"market_vault";

@@ -1,18 +1,33 @@
 import { ProgramContext } from "../context";
-import { PublicKey, Connection } from "@solana/web3.js";
-import { TransactionBuilder, resolveOrCreateATA, deriveATA } from "@orca-so/common-sdk";
+import {
+  PublicKey,
+  Connection,
+  Keypair,
+  Ed25519Program,
+  TransactionInstruction,
+} from "@solana/web3.js";
+import {
+  TransactionBuilder,
+  resolveOrCreateATA,
+  deriveATA,
+  Instruction,
+} from "@orca-so/common-sdk";
 import { PDA } from "../pda";
-import {BN} from "@project-serum/anchor";
+import { BN, toInstruction } from "@project-serum/anchor";
 import { AccountLayout } from "@solana/spl-token";
+import * as ed25519 from "@noble/ed25519";
 
-const  getTokenAccountRentExempt = async(connection: Connection, refresh: boolean = false)=>{
+const getTokenAccountRentExempt = async (
+  connection: Connection,
+  refresh: boolean = false
+) => {
   // This value should be relatively static or at least not break according to spec
   // https://docs.solana.com/developing/programming-model/accounts#rent-exemption
   let rentExempt = await connection.getMinimumBalanceForRentExemption(
     AccountLayout.span
   );
   return rentExempt;
-}
+};
 
 export class Client {
   ctx: ProgramContext;
@@ -25,7 +40,7 @@ export class Client {
     this.tokenMint = tokenMint;
   }
 
-  public async initMarket(signer: PublicKey) : Promise<TransactionBuilder> {
+  public async initMarket(signer: PublicKey): Promise<TransactionBuilder> {
     const market = this.pda.getMarketPDA();
     const tokenVault = this.pda.getMarketVaultPDA();
 
@@ -40,10 +55,13 @@ export class Client {
     return ix.toTx();
   }
 
-  public async lockToken(amount: BN) : Promise<TransactionBuilder> {
+  public async lockToken(amount: BN): Promise<TransactionBuilder> {
     const market = this.pda.getMarketPDA();
     const tokenVault = this.pda.getMarketVaultPDA();
-    const userTokenAccount = await deriveATA(this.ctx.wallet.publicKey, this.tokenMint);
+    const userTokenAccount = await deriveATA(
+      this.ctx.wallet.publicKey,
+      this.tokenMint
+    );
 
     const ix = await this.ctx.ixs.lockToken({
       user: this.ctx.wallet.publicKey,
@@ -57,18 +75,51 @@ export class Client {
     return ix.toTx();
   }
 
-  public async unlockToken(amount: BN) : Promise<TransactionBuilder> {
+  public async getUnlockSignatureMsg(
+    internalId: string,
+    user: PublicKey,
+    amount: BN,
+    signer: Keypair
+  ): Promise<SignatureResponse> {
+    let msg = getUnlockTxBytes(internalId, user, this.tokenMint, amount);
+    let sig = await getSignature(signer, msg);
+
+    return {
+      msg: msg,
+      signature: sig,
+      publicKey: signer.publicKey,
+    };
+  }
+
+  public async unlockToken(
+    txId: string,
+    amount: BN,
+    signatureResponse: SignatureResponse
+  ): Promise<TransactionBuilder> {
     const market = this.pda.getMarketPDA();
     const tokenVault = this.pda.getMarketVaultPDA();
     const { address: userTokenAccount, ...createuserTokenAccountInstruction } =
-    await resolveOrCreateATA(
-      this.ctx.connection,
-      this.ctx.wallet.publicKey,
-      this.tokenMint,
-      () => getTokenAccountRentExempt(this.ctx.connection),
-      undefined,
-      this.ctx.wallet.publicKey
-    );
+      await resolveOrCreateATA(
+        this.ctx.connection,
+        this.ctx.wallet.publicKey,
+        this.tokenMint,
+        () => getTokenAccountRentExempt(this.ctx.connection),
+        undefined,
+        this.ctx.wallet.publicKey
+      );
+
+    //Construct ed25510 x
+    let ed25519TxId: TransactionInstruction =
+      Ed25519Program.createInstructionWithPublicKey({
+        publicKey: signatureResponse.publicKey.toBytes(),
+        message: signatureResponse.msg,
+        signature: signatureResponse.signature,
+      });
+    let ed25519Ix: Instruction = {
+      instructions: [ed25519TxId],
+      cleanupInstructions: [],
+      signers: [],
+    };
 
     const ix = await this.ctx.ixs.unlockToken({
       user: this.ctx.wallet.publicKey,
@@ -77,8 +128,57 @@ export class Client {
       market: market,
       tokenVault: tokenVault,
       amount: amount,
+      sig: signatureResponse.signature,
+      txId: txId,
     });
 
-    return ix.toTx().prependInstruction(createuserTokenAccountInstruction);
+    return ix
+      .toTx()
+      .prependInstruction(ed25519Ix)
+      .prependInstruction(createuserTokenAccountInstruction);
   }
 }
+
+const getUnlockTxBytes = (
+  internalId: string,
+  user: PublicKey,
+  tokenMint: PublicKey,
+  amount: BN
+) => {
+  const allBytes = [
+    Uint8Array.from(Buffer.from(internalId)), // internal id
+    Uint8Array.from(user.toBytes()), // user addr
+    Uint8Array.from(tokenMint.toBytes()), // mint addr
+    Uint8Array.from(amount.toArray(undefined, 8)), // amount
+  ];
+
+  let msg_bytes_len = 0;
+  for (const bytes of allBytes) {
+    msg_bytes_len += bytes.length;
+  }
+  let msg_bytes = new Uint8Array(msg_bytes_len);
+
+  // set the msg bytes
+  var offset = 0;
+  for (const bytes of allBytes) {
+    msg_bytes.set(bytes, offset);
+    offset += bytes.length;
+  }
+
+  return msg_bytes;
+};
+
+export const getSignature = async (
+  signer: Keypair,
+  msg: Uint8Array
+): Promise<Uint8Array> => {
+  let signature: Uint8Array;
+  signature = await ed25519.sign(msg, signer.secretKey.slice(0, 32));
+  return signature;
+};
+
+export type SignatureResponse = {
+  msg: Uint8Array;
+  signature: Uint8Array;
+  publicKey: PublicKey;
+};

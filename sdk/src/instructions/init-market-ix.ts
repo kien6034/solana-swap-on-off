@@ -5,13 +5,12 @@ import { SwapOnOff } from "../artifacts/swap_on_off";
 import { PDAInfo } from "../pda";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
-
 export type InitializeConfigParams = {
   initializer: PublicKey;
   signer: PublicKey;
   tokenMint: PublicKey;
   market: PDAInfo;
-  tokenVault: PDAInfo
+  tokenVault: PDAInfo;
 };
 
 export async function initializeConfig(

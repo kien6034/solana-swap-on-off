@@ -1,13 +1,13 @@
 import { PublicKey, Connection, Keypair, Commitment } from "@solana/web3.js";
 import { AnchorProvider, Wallet } from "@project-serum/anchor";
-import {  PDA, ProgramContext } from "../../sdk/src";
+import { PDA, ProgramContext } from "@kien6034/swap-on-off";
 import { env } from "../env";
 
 export * from "./wallet";
 
-export type ProgramFixture = { 
-  ctx: ProgramContext,
-  tokenMint: PublicKey,
+export type ProgramFixture = {
+  ctx: ProgramContext;
+  tokenMint: PublicKey;
 };
 
 export const getFixture = async function (
@@ -30,4 +30,3 @@ export const getFixture = async function (
     tokenMint,
   };
 };
-

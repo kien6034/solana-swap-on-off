@@ -209,6 +209,28 @@ export type SwapOnOff = {
       }
     }
   ],
+  "events": [
+    {
+      "name": "UnlockEvent",
+      "fields": [
+        {
+          "name": "txId",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "user",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u64",
+          "index": false
+        }
+      ]
+    }
+  ],
   "errors": [
     {
       "code": 6000,
@@ -432,6 +454,28 @@ export const IDL: SwapOnOff = {
           }
         ]
       }
+    }
+  ],
+  "events": [
+    {
+      "name": "UnlockEvent",
+      "fields": [
+        {
+          "name": "txId",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "user",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u64",
+          "index": false
+        }
+      ]
     }
   ],
   "errors": [

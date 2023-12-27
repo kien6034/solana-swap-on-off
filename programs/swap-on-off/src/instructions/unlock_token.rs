@@ -4,8 +4,9 @@ use anchor_lang::solana_program::sysvar::instructions::{
     ID as IX_ID,
     load_instruction_at_checked,
 };
-use anchor_spl::token::{ Mint, TokenAccount, self };
+use anchor_spl::token::{ Mint, TokenAccount };
 use crate::errors::ErrorCode;
+use crate::events::UnlockEvent;
 use crate::util::{ get_message_bytes, verify_ed25519_ix };
 use crate::{ state::Market, MARKET_PDA_SEED, MARKET_VAULT_PDA_SEED };
 use crate::util::token::transfer_from_vault_to_user;
@@ -24,7 +25,7 @@ pub fn unlock_token(
     let token_mint = &ctx.accounts.token_mint;
 
     // CHECK if the signature has been used
-    let msg = get_message_bytes(tx_id, user.key(), token_mint.key(), amount);
+    let msg = get_message_bytes(tx_id.clone(), user.key(), token_mint.key(), amount);
     let pk = market.signer.to_bytes();
     let current_idx = load_current_index_checked(&ctx.accounts.ix_sysvar)?;
     let sig_idx = current_idx.checked_sub(1).ok_or(ErrorCode::NumberCastError)?;
@@ -40,6 +41,15 @@ pub fn unlock_token(
         amount,
         &[&market.market_seeds()]
     )?;
+
+    let unlock_event = UnlockEvent {
+        txId: tx_id,
+        user: *user.key,
+        amount,
+    };
+
+    msg!("Unlock event: {:?}", unlock_event);
+    emit!(unlock_event);
 
     Ok(())
 }

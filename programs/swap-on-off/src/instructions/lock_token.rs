@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{ Mint, TokenAccount };
+use crate::events::LockEvent;
 use crate::{ state::Market, MARKET_PDA_SEED, MARKET_VAULT_PDA_SEED };
 use crate::util::token::transfer_from_user_to_vault;
 
@@ -16,6 +17,14 @@ pub fn lock_token(ctx: Context<LockToken>, amount: u64) -> Result<(), ProgramErr
         &token_program.to_account_info(),
         amount
     )?;
+
+    let lock_event = LockEvent {
+        user: *user.key,
+        amount,
+    };
+
+    msg!("lock event: {:?}", lock_event);
+    emit!(lock_event);
 
     Ok(())
 }

@@ -43,7 +43,7 @@ pub fn unlock_token(
     )?;
 
     let unlock_event = UnlockEvent {
-        txId: tx_id,
+        tx_id,
         user: *user.key,
         amount,
     };
